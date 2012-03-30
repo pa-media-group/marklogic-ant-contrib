@@ -11,7 +11,7 @@
 
     <modules>
         <module>marklogic-ant-apt</module>
-        <module>marklogic-ant-tasks</module>
+        <module>marklogic-ant-contrib</module>
     </modules>
 
     <name>Ant utilities for Marklogic</name>
