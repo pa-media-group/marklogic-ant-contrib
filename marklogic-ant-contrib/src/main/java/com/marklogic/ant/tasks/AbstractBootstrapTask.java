@@ -85,7 +85,7 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
         try {
             response = getHttpClient().execute(httpPost);
         } catch (Exception e) {
-            throw new BuildException("Error executing post", e);
+            throw new BuildException("Error executing post: " + e.getLocalizedMessage(), e);
         }
 
         if (response.getStatusLine().getStatusCode() != 200) {
