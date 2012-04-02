@@ -57,10 +57,24 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Internal dependencies -->
+            <dependency>
+                <groupId>com.marklogic</groupId>
+                <artifactId>marklogic-ant-apt</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- External dependencies -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -83,35 +97,14 @@
                 <version>4.1.2</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.6.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-jdk14</artifactId>
-                <version>1.6.2</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.1.2</version>
             </dependency>
             <dependency>
                 <groupId>xom</groupId>
                 <artifactId>xom</artifactId>
                 <version>1.2.5</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.marklogic</groupId>
-                <artifactId>marklogic-ant-apt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.intellij</groupId>
-                <artifactId>annotations</artifactId>
-                <version>9.0.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
