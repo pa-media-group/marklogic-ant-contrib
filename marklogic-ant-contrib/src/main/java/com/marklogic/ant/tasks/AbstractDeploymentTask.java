@@ -62,7 +62,7 @@ public class AbstractDeploymentTask extends AbstractMarklogicTask {
     protected Session getSession(final String database) {
         Session s = sessions.get(database);
         if (s == null) {
-            s = getXccSession(database);
+            s = getXccSessionFactory().getXccSession(database);
             sessions.put(database, s);
         }
         return s;
@@ -79,7 +79,7 @@ public class AbstractDeploymentTask extends AbstractMarklogicTask {
     }
 
     protected ResultSequence executeInstallAction(String action, String module) throws RequestException {
-        Session session = this.getXccSession();
+        Session session = getXccSessionFactory().getXccSession(getDatabase());
         Request request = session.newModuleInvoke(module);
         request.setNewStringVariable("action", action);
         request.setNewStringVariable("environ", environment.getName());
@@ -123,7 +123,7 @@ public class AbstractDeploymentTask extends AbstractMarklogicTask {
         RequestException lastException = null;
         while (!success && count-- > 0) {
             /* Try and get session */
-            Session session = getXccSession();
+            Session session = getXccSessionFactory().getXccSession();
             if (session != null) {
                 /* Attempt simple xquery */
                 AdhocQuery q = session.newAdhocQuery("xquery version \"1.0-ml\";\n1");
@@ -178,5 +178,13 @@ public class AbstractDeploymentTask extends AbstractMarklogicTask {
 
     public Environment getEnvironment() {
         return environment;
+    }
+
+    public void setEnvironmentRef(String refid) {
+        Object reference = getProject().getReference(refid);
+        if(!(reference instanceof Environment)) {
+            throw new BuildException("Illegal reference, environmentRef should reference an environment type.");
+        }
+        this.environment = (Environment) reference;
     }
 }

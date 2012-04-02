@@ -19,7 +19,7 @@ public class BootstrapCondition extends AbstractBootstrapTask implements Conditi
     private boolean canConnectToBootstrapServer() {
         boolean success = false;
         /* Try and get session */
-        Session session = getXccSession();
+        Session session = getXccSessionFactory().getXccSession();
         if (session != null) {
             session.getLogger().setLevel(Level.OFF);
             /* Attempt simple xquery */

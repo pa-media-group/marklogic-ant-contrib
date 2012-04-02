@@ -1,9 +1,9 @@
 package com.marklogic.ant.tasks;
 
-import com.marklogic.xcc.ContentSource;
-import com.marklogic.xcc.ContentSourceFactory;
-import com.marklogic.xcc.Session;
-import org.apache.commons.lang.StringUtils;
+import com.marklogic.ant.types.Connection;
+import com.marklogic.ant.types.ConnectionImpl;
+import com.marklogic.ant.types.XCCSessionFactory;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
@@ -11,66 +11,40 @@ import org.apache.tools.ant.Task;
  */
 public abstract class AbstractMarklogicTask extends Task {
 
-    /**
-     * The host MarkLogic Server is running on.
-     */
-    protected String host = "localhost";
+    private XCCSessionFactory sessionFactory;
 
-    /**
-     * The host MarkLogic Server is running on.
-     */
-    protected String username = "admin";
-
-    /**
-     * The host MarkLogic Server is running on.
-     */
-    protected String password = "admin";
-
-    /**
-     * The XDBC port used for install purposes.
-     */
-    protected int xdbcPort = 8998;
-
-    /**
-     * The database to be used for XDBC connections.
-     */
     protected String database;
 
-    public void setHost(String host) {
-        this.host = host;
-    }
+    private Connection connection;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setXdbcPort(int xdbcPort) {
-        this.xdbcPort = xdbcPort;
+    public String getDatabase() {
+        return database;
     }
 
     public void setDatabase(String database) {
         this.database = database;
     }
 
-    protected Session getXccSession() {
-        return getXccSession(database);
-    }
-
-    protected Session getXccSession(final String database) {
-        ContentSource cs;
-        if (StringUtils.isBlank(database)) {
-            cs = ContentSourceFactory.newContentSource(host, xdbcPort, username, password);
-        } else {
-            cs = ContentSourceFactory.newContentSource(host, xdbcPort, username, password, database);
+    public void setConnectionRef(String connectionRef) {
+        Object o = getProject().getReference(connectionRef);
+        if(o == null) {
+            throw new BuildException("Reference does not exist.");
         }
-        return cs.newSession();
+        if(o instanceof ConnectionImpl) {
+            this.connection = (Connection) o;
+        } else {
+            throw new BuildException("Reference is not to a connection object.");
+        }
     }
 
-    protected Session getXccSession(final String database, final int port) {
-        return ContentSourceFactory.newContentSource(host, port, username, password, database).newSession();
+    public XCCSessionFactory getXccSessionFactory() {
+        if(sessionFactory == null) {
+            this.sessionFactory = new XCCSessionFactory(connection);
+        }
+        return sessionFactory;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

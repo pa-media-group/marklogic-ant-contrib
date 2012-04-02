@@ -1,10 +1,13 @@
 package com.marklogic.ant.types;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import com.marklogic.AntHelper;
 import com.marklogic.ant.annotation.AntType;
+import com.marklogic.predicates.XPathMatchingPredicate;
 import nu.xom.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.PropertyHelper;
@@ -14,6 +17,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -283,11 +287,21 @@ public class Environment extends DataType {
         return configurationXml;
     }
 
+    public Element findServer(final String name) throws NoSuchElementException {
+        return Iterators.find(getServers().iterator(),
+                XPathMatchingPredicate.match(String.format(".[@name = '%s']", name)));
+    }
+
+    public Optional<Element> tryFindServer(final String name) {
+        return Iterators.tryFind(getServers().iterator(),
+                XPathMatchingPredicate.match(String.format(".[@name = '%s']", name)));
+    }
+
     /**
      * Iterate over node list returning only those nodes instances that are Elements
      *
-     * @param nodes
-     * @return
+     * @param node Parent node
+     * @return Child node iterator
      */
     private static Iterator<Node> nodeIterator(final Node node) {
         return new AbstractIterator<Node>() {

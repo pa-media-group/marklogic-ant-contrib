@@ -1,13 +1,14 @@
 package com.marklogic.ant.tasks;
 
+import com.google.common.base.Optional;
+import com.marklogic.ant.types.ConnectionImpl;
+import com.marklogic.ant.types.HttpSessionFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
@@ -30,7 +31,7 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
     /**
      * The port used to bootstrap MarkLogic Server.
      */
-    protected int bootstrapPort = 8000;
+    private Optional<Integer> bootstrapPort = Optional.of(8000);
 
     /**
      * The MarkLogic Installer XDBC server name.
@@ -38,21 +39,12 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
     protected String xdbcName = "MarkLogic-Installer-XDBC";
 
     /**
-     * The modules database used to bootstrap MarkLogic Server.
-     */
-    protected String xdbcModulesDatabase;
-
-    /**
      * The MarkLogic Installer XDBC module root setting.
      */
     protected String xdbcModuleRoot = "/";
 
-    public void setXdbcModulesDatabase(String xdbcModulesDatabase) {
-        this.xdbcModulesDatabase = xdbcModulesDatabase;
-    }
-
     public void setBootstrapPort(int bootstrapPort) {
-        this.bootstrapPort = bootstrapPort;
+        this.bootstrapPort = Optional.of(bootstrapPort);
     }
 
     public void setXdbcName(String xdbcName) {
@@ -78,8 +70,11 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
 
         URI uri;
         try {
-            uri = URIUtils.createURI("http", this.host, bootstrapPort, "/use-cases/eval2.xqy",
-                    URLEncodedUtils.format(queryParameters, "UTF-8"), null);
+            ConnectionImpl connection = new ConnectionImpl(this.getConnection());
+            connection.setPort(bootstrapPort.get());
+
+            HttpSessionFactory factory = new HttpSessionFactory(connection);
+            uri = factory.getURI("/use-cases/eval2.xqy", queryParameters);
         } catch (URISyntaxException e) {
             throw new BuildException("Invalid URI", e);
         }
@@ -106,7 +101,7 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         httpClient.getCredentialsProvider().setCredentials(
                 AuthScope.ANY,
-                new UsernamePasswordCredentials(username, password));
+                new UsernamePasswordCredentials(getConnection().getUsername(), getConnection().getPassword()));
         httpClient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
 
         return httpClient;

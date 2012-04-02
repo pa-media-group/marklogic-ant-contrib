@@ -1,5 +1,6 @@
 package com.marklogic.ant.tasks;
 
+import com.marklogic.AntHelper;
 import com.marklogic.ant.annotation.AntTask;
 import com.marklogic.xcc.Content;
 import com.marklogic.xcc.ContentFactory;
@@ -35,7 +36,7 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
         XQueryDocumentBuilder xq = new XQueryDocumentBuilder();
         xq.append(XQueryModuleAdmin.importModule());
         String config = xq.assign("config", XQueryModuleAdmin.getConfiguration());
-        xq.assign(config, XQueryModuleAdmin.databaseCreate(config, xdbcModulesDatabase));
+        xq.assign(config, XQueryModuleAdmin.databaseCreate(config, getDatabase()));
         xq.doReturn(XQueryModuleAdmin.saveConfiguration(config));
         return XQueryModuleXDMP.eval(xq.toString());
     }
@@ -44,7 +45,7 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
         XQueryDocumentBuilder xq = new XQueryDocumentBuilder();
         xq.append(XQueryModuleAdmin.importModule());
         String config = xq.assign("config", XQueryModuleAdmin.getConfiguration());
-        xq.assign(config, XQueryModuleAdmin.forestCreate(config, xdbcModulesDatabase));
+        xq.assign(config, XQueryModuleAdmin.forestCreate(config, database));
         xq.doReturn(XQueryModuleAdmin.saveConfiguration(config));
         return XQueryModuleXDMP.eval(xq.toString());
     }
@@ -53,8 +54,8 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
         XQueryDocumentBuilder xq = new XQueryDocumentBuilder();
         xq.append(XQueryModuleAdmin.importModule());
         String config = xq.assign("config", XQueryModuleAdmin.getConfiguration());
-        xq.assign(config, XQueryModuleAdmin.attachForest(config, XQueryModuleXDMP.database(xdbcModulesDatabase),
-                XQueryModuleXDMP.forest(xdbcModulesDatabase)));
+        xq.assign(config, XQueryModuleAdmin.attachForest(config, XQueryModuleXDMP.database(database),
+                XQueryModuleXDMP.forest(database)));
         xq.doReturn(XQueryModuleAdmin.saveConfiguration(config));
         return XQueryModuleXDMP.eval(xq.toString());
     }
@@ -64,7 +65,7 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
         xq.append(XQueryModuleAdmin.importModule());
         String config = xq.assign("config", XQueryModuleAdmin.getConfiguration());
         xq.assign(config, XQueryModuleAdmin.webdavServerCreate(config, xdbcName + "-WebDAV", xdbcModuleRoot,
-                xdbcPort + 1, XQueryModuleXDMP.database(xdbcModulesDatabase)));
+                getConnection().getPort() + 1, XQueryModuleXDMP.database(database)));
         xq.doReturn(XQueryModuleAdmin.saveConfiguration(config));
         return XQueryModuleXDMP.eval(xq.toString());
     }
@@ -73,8 +74,9 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
         XQueryDocumentBuilder xq = new XQueryDocumentBuilder();
         xq.append(XQueryModuleAdmin.importModule());
         String config = xq.assign("config", XQueryModuleAdmin.getConfiguration());
-        xq.assign(config, XQueryModuleAdmin.xdbcServerCreate(config, xdbcName, xdbcModuleRoot, xdbcPort,
-                XQueryModuleXDMP.database(xdbcModulesDatabase), XQueryModuleXDMP.database("Security")));
+        xq.assign(config, XQueryModuleAdmin.xdbcServerCreate(
+                config, xdbcName, xdbcModuleRoot, getConnection().getPort(),
+                XQueryModuleXDMP.database(database), XQueryModuleXDMP.database("Security")));
         xq.doReturn(XQueryModuleAdmin.saveConfiguration(config));
         return XQueryModuleXDMP.eval(xq.toString());
     }
@@ -82,7 +84,7 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
     protected String getBootstrapExecuteQuery() {
         XQueryDocumentBuilder sb = new XQueryDocumentBuilder();
 
-        if (!"file-system".equalsIgnoreCase(xdbcModulesDatabase)) {
+        if (!"file-system".equalsIgnoreCase(database)) {
             sb.assign("_", createDatabase());
             sb.assign("_", createForest());
             sb.assign("_", attachForestToDatabase());
@@ -91,24 +93,22 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
 
         sb.doReturn(XQueryModule.quote("Bootstrap Install - OK"));
 
-//        /* Log xquery invocation */
-//        System.out.println(" *** bootstrap.xqy *** ");
-//        System.out.println(sb.toString());
-//        System.out.println(" *** bootstrap.xqy *** ");
+        if(AntHelper.getAntHelper(getProject()).isVerbose()) {
+            /* Log xquery invocation */
+            System.out.println(" *** bootstrap.xqy *** ");
+            System.out.println(sb.toString());
+            System.out.println(" *** bootstrap.xqy *** ");
+        }
 
         return sb.toString();
     }
 
     @Override
     public void execute() throws BuildException {
-//        System.out.println("bootstrap execute");
-
         super.execute();
 
-        if (!"file-system".equalsIgnoreCase(xdbcModulesDatabase)) {
-            this.database = xdbcModulesDatabase;
-
-            Session session = getXccSession();
+        if (!"file-system".equalsIgnoreCase(database)) {
+            Session session = getXccSessionFactory().getXccSession(database);
 
             ClassLoader loader = InstallBootstrapTask.class.getClassLoader();
             for (String path : libraryPaths) {

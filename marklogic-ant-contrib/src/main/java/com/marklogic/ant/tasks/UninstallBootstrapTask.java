@@ -33,7 +33,7 @@ public class UninstallBootstrapTask extends AbstractBootstrapTask {
         sb.append(ML_ADMIN_MODULE_IMPORT);
         sb.append("try { admin:save-configuration(                                               \n");
         sb.append("        admin:database-delete( admin:get-configuration()                      \n");
-        sb.append("                             , xdmp:database('" + xdbcModulesDatabase + "') ) \n");
+        sb.append("                             , xdmp:database('" + database + "') ) \n");
         sb.append("      ) } catch ($e) { () }                                                   \n");
         sb.append(";\n");
 
@@ -41,7 +41,7 @@ public class UninstallBootstrapTask extends AbstractBootstrapTask {
         sb.append(ML_ADMIN_MODULE_IMPORT);
         sb.append("try { admin:save-configuration(                                                      \n");
         sb.append("        admin:forest-delete( admin:get-configuration()                               \n");
-        sb.append("                           , xdmp:forest('" + xdbcModulesDatabase + "'), fn:true() ) \n");
+        sb.append("                           , xdmp:forest('" + database + "'), fn:true() ) \n");
         sb.append("      ) } catch ($e) { () }                                                          \n");
         sb.append(";\n");
 
