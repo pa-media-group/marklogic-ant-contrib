@@ -45,7 +45,7 @@ Sample Build Script
 
     <!-- Environment Object -->
     <ml:environment id="test"
-                    name="test" title="Test" applicationname="store-rest-api"
+                    name="test" title="Test" applicationname="sample-api"
                     installationDescriptor="environments/test.xml">
         <ml:resources dir="${ml.src.dir}/src/main/xquery" database="modules" format="text">
             <ml:permission role="executor" capability="execute"/>
@@ -106,13 +106,13 @@ Sample Build Script
 
     <target name="set-api-permissions">
         <ml:execute-xquery connectionref="defaultConnection">
-            <ml:execution xquery="${ml.src.dir}/schema/set-api-permissions.xqy" database="store-rest-api-modules"/>
+            <ml:execution xquery="${ml.src.dir}/schema/set-api-permissions.xqy" database="sample-api-modules"/>
         </ml:execute-xquery>
     </target>
 
     <target name="set-content-permissions">
         <ml:execute-xquery connectionref="defaultConnection">
-            <ml:execution xquery="${ml.src.dir}/schema/set-content-permissions.xqy" database="store-rest-api-content"/>
+            <ml:execution xquery="${ml.src.dir}/schema/set-content-permissions.xqy" database="sample-api-content"/>
         </ml:execute-xquery>
     </target>
 
