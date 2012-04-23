@@ -38,18 +38,13 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git@github.com:ukcrpb6/marklogic-ant-tasks.git</connection>
-        <developerConnection>scm:git:git@github.com:ukcrpb6/marklogic-ant-tasks.git</developerConnection>
-        <url>http://github.com/ukcrpb6/marklogic-ant-tasks</url>
-    </scm>
-
     <dependencies>
         <!-- Internal dependencies -->
         <dependency>
             <groupId>com.marklogic</groupId>
             <artifactId>marklogic-ant-apt</artifactId>
             <scope>compile</scope>
+            <!--<optional>true</optional>-->
         </dependency>
 
         <!-- External dependencies -->
@@ -90,77 +85,14 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>apt-maven-plugin</artifactId>
-                <version>1.0-alpha-4</version>
-                <configuration>
-                    <factory>com.marklogic.ant.apt.AntAnnotationProcessorFactory</factory>
-                    <outputFiles>
-                        <outputFile>com/marklogic/ant/antlib.xml</outputFile>
-                    </outputFiles>
-                    <encoding>${maven.compile.encoding}</encoding>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.6</version>
                 <executions>
                     <execution>
-                        <id>generate-resources</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>generate-test-resources</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>test-process</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <encoding>${maven.compile.encoding}</encoding>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}/generated-sources/apt</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
