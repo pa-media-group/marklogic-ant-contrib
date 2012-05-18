@@ -64,12 +64,19 @@ public class Execution extends DataType {
     }
 
     public String getExecutionXQuery() throws BuildException {
-        checkNotNull(database);
+    	return this.getExecutionXQuery(false);
+    }
+
+    public String getExecutionXQuery(boolean useEval) throws BuildException {
         checkNotNull(xquery);
         try {
-            if (StringUtils.isBlank(database) && (properties == null || properties.isEmpty())) {
+        	if (useEval == false) {
+                return getFileAsString(xquery);
+        	}
+        	else if (StringUtils.isBlank(database) && (properties == null || properties.isEmpty())) {
                 return getFileAsString(xquery);
             } else {
+            	checkNotNull(database);
                 XQueryDocumentBuilder builder = new XQueryDocumentBuilder();
                 String values = "";
                 if (properties != null && !properties.isEmpty()) {
