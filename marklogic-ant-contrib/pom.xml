@@ -36,6 +36,19 @@
         </developer>
     </developers>
 
+	<distributionManagement>
+		<repository>
+			<id>pressassociation.releases</id>
+			<name>Nexus Release Repo</name>
+			<url>http://nexus.howden.press.net/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>pressassociation.snapshots</id>
+			<name>Nexus Snapshot Repo</name>
+			<url>http://nexus.howden.press.net/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
     <dependencies>
         <!-- Internal dependencies -->
         <dependency>

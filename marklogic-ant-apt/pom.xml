@@ -40,12 +40,18 @@
         <maven>2.2.1</maven>
     </prerequisites>
 
-    <distributionManagement>
-        <repository>
-            <id>pressassociation-internal</id>
-            <url>http://nexus.howden.press.net/nexus/content/repositories/releases</url>
-        </repository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>pressassociation.releases</id>
+			<name>Nexus Release Repo</name>
+			<url>http://nexus.howden.press.net/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>pressassociation.snapshots</id>
+			<name>Nexus Snapshot Repo</name>
+			<url>http://nexus.howden.press.net/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <properties>
         <maven.compile.encoding>UTF-8</maven.compile.encoding>

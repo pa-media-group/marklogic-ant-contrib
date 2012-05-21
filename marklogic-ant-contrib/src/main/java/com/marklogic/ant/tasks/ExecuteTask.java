@@ -61,7 +61,10 @@ public class ExecuteTask extends AbstractInstallTask {
 			if (execution.getDatabase() != null && !StringUtils.isBlank(execution.getDatabase())) {
 				database = execution.getDatabase();
 			}
-			System.out.println("Executing following query against " + database + ":\n" + execution.getXquery());
+			if (database == null || StringUtils.isBlank(database)) {
+				throw new BuildException("No database is set at the task or execute level!");
+			}
+			System.out.println("Executing following XQuery against " + database + ":\n" + execution.getXquery());
 			try {
 				executeQuery(execution.getExecutionXQuery(), database);
 			} catch (BuildException e) {
