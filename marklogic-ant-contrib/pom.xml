@@ -91,6 +91,10 @@
             <groupId>xom</groupId>
             <artifactId>xom</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+		</dependency>
     </dependencies>
 
     <build>

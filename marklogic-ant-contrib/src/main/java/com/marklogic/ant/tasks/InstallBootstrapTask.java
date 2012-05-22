@@ -2,9 +2,11 @@ package com.marklogic.ant.tasks;
 
 import com.marklogic.AntHelper;
 import com.marklogic.ant.annotation.AntTask;
+import com.marklogic.xcc.AdhocQuery;
 import com.marklogic.xcc.Content;
 import com.marklogic.xcc.ContentFactory;
 import com.marklogic.xcc.Session;
+import com.marklogic.xcc.exceptions.RequestException;
 import com.marklogic.xquery.XQueryDocumentBuilder;
 import com.marklogic.xquery.XQueryModule;
 import com.marklogic.xquery.XQueryModuleAdmin;
@@ -105,10 +107,29 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
 
     @Override
     public void execute() throws BuildException {
+    	
+        Session session = getXccSessionFactory().getXccSession();    
+        System.out.println("Bootstrap session is to " + session.getConnectionUri().toASCIIString());
+        
+		AdhocQuery q = session.newAdhocQuery("xquery version \"1.0-ml\";\n1");
+		boolean success = false;
+		try {
+			session.submitRequest(q);
+			success = true;
+		} catch (RequestException e) {
+		} finally {
+			session.close();
+		}
+        
+        if (success) {
+        	System.out.println("Bootstrap already exists, skipping this goal");
+        	return;
+        }
+        
         super.execute();
 
         if (!"file-system".equalsIgnoreCase(database)) {
-            Session session = getXccSessionFactory().getXccSession(database);
+            session = getXccSessionFactory().getXccSession(database);
 
             ClassLoader loader = InstallBootstrapTask.class.getClassLoader();
             for (String path : libraryPaths) {
