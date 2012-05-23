@@ -44,15 +44,17 @@ declare function  inst-db:install-databases($install-config)
 
 declare function  inst-db:uninstall-databases($install-config, $delete-data)
 {(
-	inst-db:detach-forests($install-config),
+    inst-db:detach-forests($install-config),
     inst-db:delete-databases($install-config),
     inst-db:delete-forests($install-config, $delete-data)
 )};
 
 declare function  inst-db:mk-database-name-from-string($install-config, $short-name)
 {
-    if($short-name eq "0") then "file-system" else
-    fn:concat($install-config/inst-conf:application/@name, "-", $short-name)
+    if($short-name eq "0") then "file-system"
+    else if ($install-config/inst-conf:application/@name ne "null") then
+        fn:concat($install-config/inst-conf:application/@name, "-", $short-name)
+    else $short-name
 };
 
 declare function  inst-db:mk-database-name($install-config, $database)
@@ -62,18 +64,21 @@ declare function  inst-db:mk-database-name($install-config, $database)
 
 declare function  inst-db:mk-forest-name($install-config, $forest)
 {
-    fn:concat($install-config/inst-conf:application/@name, "-", $forest/@name)
+    if ($install-config/inst-conf:application/@name ne "null") then
+        fn:concat($install-config/inst-conf:application/@name, "-", $forest/@name)
+    else $forest/@name
 };
 
 declare function  inst-db:create-database($database-name)
 {
     let $LOG := xdmp:log(text{"Creating Database:", $database-name})
     let $config := admin:get-configuration()
-    let $config := 
-        try {admin:database-create($config, $database-name,xdmp:database("Security"), xdmp:database("Schemas"))} 
-        catch ($e) {(xdmp:log("skipping db create (may already exist)"), $config)}
-        
-    return admin:save-configuration($config)
+    return
+    if (admin:database-exists($config, $database-name)) then
+        ()
+    else  
+        let $config := admin:database-create($config, $database-name,xdmp:database("Security"), xdmp:database("Schemas"))
+        return admin:save-configuration($config)
 };
 
 declare function inst-db:create-databases($install-config)
@@ -88,11 +93,12 @@ declare function  inst-db:create-forest($forest-name)
 {
     let $LOG := xdmp:log(text{"Creating Forest:", $forest-name})
     let $config := admin:get-configuration()
-    let $config := 
-        try {admin:forest-create($config, $forest-name, xdmp:host(), ())}
-        catch ($e) {(xdmp:log("skipping forest create (may already exist)"), $config)}
-        
-    return admin:save-configuration($config)
+    return
+    if (admin:forest-exists($config, $forest-name)) then
+        ()
+    else
+        let $config := admin:forest-create($config, $forest-name, xdmp:host(), ())
+        return admin:save-configuration($config)
 };
 
 declare function inst-db:create-forests($install-config)
@@ -256,4 +262,3 @@ declare function inst-db:delete-forests($install-config, $delete-data as xs:bool
         return
             inst-db:delete-forest($forest-name, $delete-data)
 };
-
