@@ -79,7 +79,7 @@ public class AbstractDeploymentTask extends AbstractMarklogicTask {
     }
 
     protected ResultSequence executeInstallAction(String action, String module) throws RequestException {
-        Session session = getXccSessionFactory().getXccSession(getDatabase());
+        Session session = getXccSessionFactory().getXccSession();
         Request request = session.newModuleInvoke(module);
         request.setNewStringVariable("action", action);
         request.setNewStringVariable("environ", environment.getName());

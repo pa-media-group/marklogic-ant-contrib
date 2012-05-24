@@ -11,54 +11,54 @@ declare namespace inst-conf = "http://www.marklogic.com/ps/install/config.xqy";
 <element>
     <database name="{DatabaseName}">
 
-    <set name="attribute-value-positions"			    value=""/>
-	<set name="collection-lexicon"					    value=""/>
-	<set name="directory-creation"					    value=""/>
-	<set name="element-value-positions"                 value=""/>
-	<set name="element-word-positions"		            value=""/>
-	<set name="enabled"						            value=""/>
-	<set name="expunge-locks"					        value=""/>
-	<set name="fast-case-sensitive-searches"			value=""/>
-	<set name="fast-diacritic-sensitive-searches"		value=""/>
-	<set name="fast-element-character-searches"			value=""/>
-	<set name="fast-element-phrase-searches"			value=""/>
-	<set name="fast-element-trailing-wildcard-searches"	value=""/>
-	<set name="fast-element-word-searches"				value=""/>
-	<set name="fast-phrase-searches"				    value=""/>
-	<set name="fast-reverse-searches"				    value=""/>
-	<set name="format-compatibility"				    value=""/>
-	<set name="in-memory-limit"					        value=""/>
-	<set name="in-memory-list-size"					    value=""/>
-	<set name="in-memory-range-index-size"				value=""/>
-	<set name="in-memory-reverse-index-size"			value=""/>
-	<set name="in-memory-tree-size"					    value=""/>
-	<set name="index-detection"					        value=""/>
-	<set name="inherit-collections"					    value=""/>
-	<set name="inherit-permissions"					    value=""/>
-	<set name="inherit-quality"					        value=""/>
-	<set name="journal-size"					        value=""/>
-	<set name="language"						        value=""/>
-	<set name="maintain-directory-last-modified"		value=""/>
-	<set name="maintain-last-modified"				    value=""/>
-	<set name="merge-enable"					        value=""/>
-	<set name="merge-max-size"					        value=""/>
-	<set name="merge-min-ratio"					        value=""/>
-	<set name="merge-min-size"					        value=""/>
-	<set name="merge-timestamp"					        value=""/>
-	<set name="name"						            value=""/>
-	<set name="one-character-searches"				    value=""/>
-	<set name="positions-list-max-size"				    value=""/>
-	<set name="preallocate-journals"				    value=""/>
-	<set name="preload-mapped-data"					    value=""/>
-	<set name="reindexer-enable"					    value=""/>
-	<set name="reindexer-throttle"					    value=""/>
-	<set name="reindexer-timestamp"					    value=""/>
-	<set name="stemmed-searches"					    value=""/>
-	<set name="tf-normalization"					    value=""/>
-	<set name="three-character-searches"				value=""/>
-	<set name="three-character-word-positions"			value=""/>
-	<set name="trailing-wildcard-searches"				value=""/>
-	<set name="trailing-wildcard-word-positions"		value=""/>
+    <set name="attribute-value-positions"               value=""/>
+    <set name="collection-lexicon"                      value=""/>
+    <set name="directory-creation"                      value=""/>
+    <set name="element-value-positions"                 value=""/>
+    <set name="element-word-positions"                  value=""/>
+    <set name="enabled"                                 value=""/>
+    <set name="expunge-locks"                           value=""/>
+    <set name="fast-case-sensitive-searches"            value=""/>
+    <set name="fast-diacritic-sensitive-searches"       value=""/>
+    <set name="fast-element-character-searches"         value=""/>
+    <set name="fast-element-phrase-searches"            value=""/>
+    <set name="fast-element-trailing-wildcard-searches" value=""/>
+    <set name="fast-element-word-searches"              value=""/>
+    <set name="fast-phrase-searches"                    value=""/>
+    <set name="fast-reverse-searches"                   value=""/>
+    <set name="format-compatibility"                    value=""/>
+    <set name="in-memory-limit"                         value=""/>
+    <set name="in-memory-list-size"                     value=""/>
+    <set name="in-memory-range-index-size"              value=""/>
+    <set name="in-memory-reverse-index-size"            value=""/>
+    <set name="in-memory-tree-size"                     value=""/>
+    <set name="index-detection"                         value=""/>
+    <set name="inherit-collections"                     value=""/>
+    <set name="inherit-permissions"                     value=""/>
+    <set name="inherit-quality"                         value=""/>
+    <set name="journal-size"                            value=""/>
+    <set name="language"                                value=""/>
+    <set name="maintain-directory-last-modified"        value=""/>
+    <set name="maintain-last-modified"                  value=""/>
+    <set name="merge-enable"                            value=""/>
+    <set name="merge-max-size"                          value=""/>
+    <set name="merge-min-ratio"                         value=""/>
+    <set name="merge-min-size"                          value=""/>
+    <set name="merge-timestamp"                         value=""/>
+    <set name="name"                                    value=""/>
+    <set name="one-character-searches"                  value=""/>
+    <set name="positions-list-max-size"                 value=""/>
+    <set name="preallocate-journals"                    value=""/>
+    <set name="preload-mapped-data"                     value=""/>
+    <set name="reindexer-enable"                        value=""/>
+    <set name="reindexer-throttle"                      value=""/>
+    <set name="reindexer-timestamp"                     value=""/>
+    <set name="stemmed-searches"                        value=""/>
+    <set name="tf-normalization"                        value=""/>
+    <set name="three-character-searches"                value=""/>
+    <set name="three-character-word-positions"          value=""/>
+    <set name="trailing-wildcard-searches"              value=""/>
+    <set name="trailing-wildcard-word-positions"        value=""/>
     <set name="two-character-searches"                  value=""/>
     <set name="uri-lexicon"                             value=""/>
     <set name="word-positions"                               value="(true|false)"/>
@@ -79,8 +79,8 @@ declare namespace inst-conf = "http://www.marklogic.com/ps/install/config.xqy";
     </database>
 
     <database/>
-	...
-	...
+    ...
+    ...
 
 </element>
 :::)
@@ -153,8 +153,7 @@ declare function  inst-db-set:do-database-set-2($database-name, $set)
         try {
              if ("language"                                     eq $name) then admin:database-set-language($config, $database-id, xs:string($value))
         else if ("maintain-directory-last-modified"             eq $name) then admin:database-set-maintain-directory-last-modified($config, $database-id, fn:boolean($value))
-        else if ("maintain-last-modified"                       eq $name) then admin:database-set-merge-enable($config, $database-id, fn:boolean($value))
-        else if ("merge-enable"                                 eq $name) then admin:database-set-merge-max-size($config, $database-id, fn:boolean($value))
+        else if ("maintain-last-modified"                       eq $name) then admin:database-set-maintain-last-modified($config, $database-id, fn:boolean($value))
         else if ("merge-max-size"                               eq $name) then admin:database-set-merge-max-size($config, $database-id, xs:unsignedInt($value))
         else if ("merge-min-ratio"                              eq $name) then admin:database-set-merge-min-ratio($config, $database-id, xs:unsignedInt($value))
         else if ("merge-min-size"                               eq $name) then admin:database-set-merge-min-size($config, $database-id, xs:unsignedInt($value))
