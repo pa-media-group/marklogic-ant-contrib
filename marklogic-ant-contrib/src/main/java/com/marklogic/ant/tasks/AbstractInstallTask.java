@@ -31,8 +31,6 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 
 
     protected void installContent() throws BuildException {
-//        executeAction(ACTION_INSTALL_CONTENT);
-
         /* Install content resources from maven project */
         installResources(getEnvironment().getResources());
     }
