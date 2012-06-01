@@ -12,6 +12,8 @@ public class InstallTask extends AbstractInstallTask {
     public void execute() throws BuildException {
         super.execute();
         installDatabases();
+        installIndices();
+        installFields();
         installTriggers();
         installTasks();
         installServers();

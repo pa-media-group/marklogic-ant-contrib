@@ -24,6 +24,8 @@ public abstract class AbstractUninstallTask extends AbstractDeploymentTask {
 	protected static final String ACTION_UNINSTALL_CONTENT = "uninstall-content";
 	protected static final String ACTION_UNINSTALL_CPF = "uninstall-cpf";
 	protected static final String ACTION_UNINSTALL_DATABASES = "uninstall-databases";
+	protected static final String ACTION_UNINSTALL_INDICES = "uninstall-indices";
+	protected static final String ACTION_UNINSTALL_FIELDS = "uninstall-fields";
 	protected static final String ACTION_UNINSTALL_TRIGGERS = "uninstall-triggers";
 	protected static final String ACTION_UNINSTALL_SERVERS = "uninstall-servers";
 	protected static final String ACTION_UNINSTALL_TASKS = "uninstall-tasks";
@@ -44,6 +46,14 @@ public abstract class AbstractUninstallTask extends AbstractDeploymentTask {
 
 	protected void uninstallDatabases() throws BuildException {
 		executeAction(ACTION_UNINSTALL_DATABASES);
+	}
+
+	protected void uninstallIndices() throws BuildException {
+		executeAction(ACTION_UNINSTALL_INDICES);
+	}
+
+	protected void uninstallFields() throws BuildException {
+		executeAction(ACTION_UNINSTALL_FIELDS);
 	}
 
 	protected void uninstallTriggers() throws BuildException {

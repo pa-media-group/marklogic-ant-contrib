@@ -1,21 +1,26 @@
 package com.marklogic.ant.types;
 
-import com.marklogic.AntHelper;
-import com.marklogic.ant.annotation.AntType;
-import com.marklogic.xquery.XQueryDocumentBuilder;
-import com.marklogic.xquery.XQueryModule;
-import com.marklogic.xquery.XQueryModuleXDMP;
-import org.apache.commons.lang.StringUtils;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.DataType;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.DataType;
+
+import com.marklogic.AntHelper;
+import com.marklogic.ant.annotation.AntType;
+import com.marklogic.install.xquery.XQueryDocumentBuilder;
+import com.marklogic.install.xquery.XQueryModule;
+import com.marklogic.install.xquery.XQueryModuleXDMP;
 
 /**
  * Defines the context of an XQuery Execution
