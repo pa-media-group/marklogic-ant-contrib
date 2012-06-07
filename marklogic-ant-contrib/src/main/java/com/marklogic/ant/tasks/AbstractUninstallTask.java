@@ -72,9 +72,10 @@ public abstract class AbstractUninstallTask extends AbstractDeploymentTask {
 		List<String> uris = new ArrayList<String>();
 
 		try {
+            String applicationName = getEnvironment().getApplicationName();
 			for (ResourceFileSet resource : resources) {
-				final String targetDatabase = getEnvironment()
-						.getApplicationName() + "-" + resource.getDatabase();
+				final String targetDatabase =
+                        applicationName != null ? applicationName + "-" + resource.getDatabase() : resource.getDatabase();
 				log(" -- ".concat(targetDatabase).concat(" -- "));
 
 				/*

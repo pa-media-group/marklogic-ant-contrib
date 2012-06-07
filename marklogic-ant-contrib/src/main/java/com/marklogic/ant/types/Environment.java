@@ -247,7 +247,9 @@ public class Environment extends DataType {
 
             Element applicationElement = new Element("application", INSTALL_NS);
             namedElement.appendChild(applicationElement);
-            applicationElement.addAttribute(new Attribute("name", applicationName));
+            if (applicationName !=  null) {
+                applicationElement.addAttribute(new Attribute("name", applicationName));
+            }
             applicationElement.addAttribute(new Attribute("title", title));
             applicationElement.addAttribute(new Attribute("filesystem-root", filesystemRoot));
 

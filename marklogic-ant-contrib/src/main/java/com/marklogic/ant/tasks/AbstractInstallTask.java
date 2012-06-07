@@ -74,9 +74,10 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 
 	private void installPipeline(List<ResourceFileSet> resources) {
 		try {
+            String applicationName = getEnvironment().getApplicationName();
 			for (final ResourceFileSet resource : resources) {
-				final String targetDatabase = getEnvironment()
-						.getApplicationName() + "-" + resource.getDatabase();
+				final String targetDatabase =
+                        applicationName != null ? applicationName + "-" + resource.getDatabase() : resource.getDatabase();
 				System.out
 						.println(" -- ".concat(targetDatabase).concat(" -- "));
 
@@ -125,9 +126,10 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 
 	private void installResources(List<ResourceFileSet> resources) {
 		try {
+            String applicationName = getEnvironment().getApplicationName();
 			for (ResourceFileSet resource : resources) {
-				final String targetDatabase = getEnvironment()
-						.getApplicationName() + "-" + resource.getDatabase();
+				final String targetDatabase =
+                        applicationName != null ? applicationName + "-" + resource.getDatabase() : resource.getDatabase();
 				System.out
 						.println(" -- ".concat(targetDatabase).concat(" -- "));
 

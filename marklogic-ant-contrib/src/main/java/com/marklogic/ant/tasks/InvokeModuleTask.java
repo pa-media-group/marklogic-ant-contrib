@@ -56,9 +56,10 @@ public class InvokeModuleTask extends AbstractInstallTask {
         /*
          * Get necessary properties from serverName to create XCC session
          */
-        final String database = getEnvironment().getApplicationName()
-                .concat("-")
-                .concat(serverElement.get().getAttribute("database").getValue());
+        String applicationName = getEnvironment().getApplicationName();
+        String databaseName = serverElement.get().getAttribute("database").getValue();
+        final String database =
+                applicationName != null ? applicationName + "-" + databaseName : databaseName;
         final int port = Integer.parseInt(serverElement.get().getAttribute("port").getValue());
 
         ConnectionImpl connection = new ConnectionImpl(getConnection());
