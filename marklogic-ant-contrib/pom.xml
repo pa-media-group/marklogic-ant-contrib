@@ -5,7 +5,7 @@
     <parent>
         <artifactId>marklogic-ant-parent</artifactId>
         <groupId>com.marklogic</groupId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>marklogic-ant-contrib</artifactId>
