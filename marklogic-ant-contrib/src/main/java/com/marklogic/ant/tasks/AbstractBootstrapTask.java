@@ -7,6 +7,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.marklogic.xcc.Content;
+import com.marklogic.xcc.ContentFactory;
+import com.marklogic.xcc.Session;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -32,6 +35,20 @@ import com.google.common.base.Optional;
  * @author Bob Browning <bob.browning@pressassociation.com>
  */
 public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
+    protected final String[] libraryPaths = {
+            "/install.xqy"
+            , "/lib/lib-app-server.xqy"
+            , "/lib/lib-cpf.xqy"
+            , "/lib/lib-database-add.xqy"
+            , "/lib/lib-database-set.xqy"
+            , "/lib/lib-database.xqy"
+            , "/lib/lib-field.xqy"
+            , "/lib/lib-trigger.xqy"
+            , "/lib/lib-task.xqy"
+            , "/lib/lib-index.xqy"
+            , "/lib/lib-install.xqy"
+            , "/lib/lib-load.xqy"
+    };
 
 	protected static final String XQUERY_PROLOG = "xquery version '1.0-ml';\n";
 
@@ -303,4 +320,32 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
 
 		return (response.getStatusLine().getStatusCode() == 200);
 	}
+
+    protected void updateModules() {
+        Session session = getXccSessionFactory().getXccSession();
+        System.out.println("Bootstrap session is to " + session.getConnectionUri().toASCIIString());
+
+        if (!"file-system".equalsIgnoreCase(database)) {
+            session = getXccSessionFactory().getXccSession(database);
+
+            ClassLoader loader = UpdateBootstrapTask.class.getClassLoader();
+            for (String path : libraryPaths) {
+                System.out.println("Uploading " + path);
+                try {
+                    Content cs = ContentFactory.newContent(path, loader.getResource("xquery" + path), null);
+                    session.insertContent(cs);
+                } catch (Exception e) {
+                    throw new BuildException("Failed to insert required library. " + e.getLocalizedMessage(), e);
+                }
+                session.commit();
+            }
+        } else {
+            System.out.println("");
+            System.out.println("***************************************************************");
+            System.out.println("* Using filesystem modules location, ensure that install.xqy  *");
+            System.out.println("* and associated libraries are placed into the specified root *");
+            System.out.println("***************************************************************");
+            System.out.println("");
+        }
+    }
 }

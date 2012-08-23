@@ -20,21 +20,6 @@ import com.marklogic.xcc.exceptions.RequestException;
 @AntTask("installBootstrap")
 public class InstallBootstrapTask extends AbstractBootstrapTask {
 
-    private final String[] libraryPaths = {
-            "/install.xqy"
-            , "/lib/lib-app-server.xqy"
-            , "/lib/lib-cpf.xqy"
-            , "/lib/lib-database-add.xqy"
-            , "/lib/lib-database-set.xqy"
-            , "/lib/lib-database.xqy"
-            , "/lib/lib-field.xqy"
-            , "/lib/lib-trigger.xqy"
-            , "/lib/lib-task.xqy"
-            , "/lib/lib-index.xqy"
-            , "/lib/lib-install.xqy"
-            , "/lib/lib-load.xqy"
-    };
-
     private String createDatabase() {
         XQueryDocumentBuilder xq = new XQueryDocumentBuilder();
         xq.append(XQueryModuleAdmin.importModule());
@@ -123,33 +108,12 @@ public class InstallBootstrapTask extends AbstractBootstrapTask {
 		}
         
         if (success) {
-        	System.out.println("Bootstrap already exists, skipping this goal");
-        	return;
-        }
-        
-        super.execute();
-
-        if (!"file-system".equalsIgnoreCase(database)) {
-            session = getXccSessionFactory().getXccSession(database);
-
-            ClassLoader loader = InstallBootstrapTask.class.getClassLoader();
-            for (String path : libraryPaths) {
-                System.out.println("Uploading " + path);
-                try {
-                    Content cs = ContentFactory.newContent(path, loader.getResource("xquery" + path), null);
-                    session.insertContent(cs);
-                } catch (Exception e) {
-                    throw new BuildException("Failed to insert required library. " + e.getLocalizedMessage(), e);
-                }
-                session.commit();
-            }
+        	System.out.println("Bootstrap already exists, just updating.");
         } else {
-            System.out.println("");
-            System.out.println("***************************************************************");
-            System.out.println("* Using filesystem modules location, ensure that install.xqy  *");
-            System.out.println("* and associated libraries are placed into the specified root *");
-            System.out.println("***************************************************************");
-            System.out.println("");
+            System.out.println("Creating bootstrap database and server.");
+            super.execute();
         }
+
+        updateModules();
     }
 }
