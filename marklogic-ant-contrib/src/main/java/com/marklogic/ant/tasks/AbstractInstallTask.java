@@ -30,7 +30,8 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 	protected static final String ACTION_INSTALL_CONTENT = "install-content";
 	protected static final String ACTION_INSTALL_CPF = "install-cpf";
 	protected static final String ACTION_INSTALL_DATABASES = "install-databases";
-	protected static final String ACTION_INSTALL_INDICES = "install-indices";
+    protected static final String ACTION_UPDATE_DATABASES = "update-databases";
+    protected static final String ACTION_INSTALL_INDICES = "install-indices";
 	protected static final String ACTION_INSTALL_FIELDS = "install-fields";
 	protected static final String ACTION_INSTALL_TRIGGERS = "install-triggers";
 	protected static final String ACTION_INSTALL_SERVERS = "install-servers";
@@ -51,6 +52,10 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 	protected void installDatabases() throws BuildException {
 		executeAction(ACTION_INSTALL_DATABASES);
 	}
+
+    protected void updateDatabases() throws BuildException {
+        executeAction(ACTION_UPDATE_DATABASES);
+    }
 
 	protected void installIndices() throws BuildException {
 		executeAction(ACTION_INSTALL_INDICES);
