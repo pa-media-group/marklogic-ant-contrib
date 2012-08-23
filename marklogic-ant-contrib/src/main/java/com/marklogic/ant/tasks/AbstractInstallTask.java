@@ -35,7 +35,8 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 	protected static final String ACTION_INSTALL_FIELDS = "install-fields";
 	protected static final String ACTION_INSTALL_TRIGGERS = "install-triggers";
 	protected static final String ACTION_INSTALL_SERVERS = "install-servers";
-	protected static final String ACTION_INSTALL_TASKS = "install-tasks";
+    protected static final String ACTION_UPDATE_SERVERS = "update-servers";
+    protected static final String ACTION_INSTALL_TASKS = "install-tasks";
 
 	protected void installContent() throws BuildException {
 		/* Install content resources from maven project */
@@ -76,6 +77,10 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 	protected void installServers() throws BuildException {
 		executeAction(ACTION_INSTALL_SERVERS);
 	}
+
+    protected void updateServers() throws BuildException {
+        executeAction(ACTION_UPDATE_SERVERS);
+    }
 
 	private void installPipeline(List<ResourceFileSet> resources) {
 		try {
