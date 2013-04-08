@@ -183,17 +183,17 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 							File.separatorChar, '/');
 					System.out.println(String.format("Deploying %s to %s",
 							sourceFile.getPath(), destinationPath));
+					Content c = null;
 					try {
-
-						Content c = newContent(destinationPath,
-								getFileAsString(sourceFile), options);
+						c = newContent(destinationPath,
+								sourceFile, options);
 						session.insertContent(c);
-					} catch (IOException e) {
-						throw new BuildException(
-								"Failed to read content file ".concat(f), e);
 					} catch (RequestException e) {
 						throw new BuildException(
 								"Failed to insert content file ".concat(f), e);
+					} finally {
+					    if(c != null)
+					        c.close();
 					}
 				}
 			}
