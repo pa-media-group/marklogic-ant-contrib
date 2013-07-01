@@ -41,7 +41,7 @@ public class ResourceFileSet extends FileSet {
     /**
      * The collection to load the specified resources into.
      */
-    private List<String> collections = new ArrayList<String>();
+    private List<Collection> collections = new ArrayList<Collection>();
 
     /**
      * The permissions the specified resources should have.
@@ -59,7 +59,7 @@ public class ResourceFileSet extends FileSet {
         this.database = database;
     }
 
-    public void addCollections(String collection) {
+    public void addCollection(Collection collection) {
         Preconditions.checkNotNull(collection);
         this.collections.add(collection);
     }
@@ -76,8 +76,8 @@ public class ResourceFileSet extends FileSet {
     /**
      * @return Collections to load resources into.
      */
-    public String[] getCollections() {
-        return collections.toArray(new String[collections.size()]);
+    public Collection[] getCollections() {
+        return collections.toArray(new Collection[collections.size()]);
     }
 
     /**

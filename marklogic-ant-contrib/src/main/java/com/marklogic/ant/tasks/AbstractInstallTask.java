@@ -1,6 +1,13 @@
 package com.marklogic.ant.tasks;
 
-import static com.marklogic.xcc.ContentFactory.newContent;
+import com.google.common.base.Throwables;
+import com.marklogic.ant.types.Collection;
+import com.marklogic.ant.types.Permission;
+import com.marklogic.ant.types.ResourceFileSet;
+import com.marklogic.xcc.*;
+import com.marklogic.xcc.exceptions.RequestException;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.resources.FileResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,18 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.resources.FileResource;
-
-import com.google.common.base.Throwables;
-import com.marklogic.ant.types.Permission;
-import com.marklogic.ant.types.ResourceFileSet;
-import com.marklogic.xcc.AdhocQuery;
-import com.marklogic.xcc.Content;
-import com.marklogic.xcc.ContentCreateOptions;
-import com.marklogic.xcc.ContentPermission;
-import com.marklogic.xcc.Session;
-import com.marklogic.xcc.exceptions.RequestException;
+import static com.marklogic.xcc.ContentFactory.newContent;
 
 /**
  * @author Bob Browning <bob.browning@pressassociation.com>
@@ -151,12 +147,17 @@ public abstract class AbstractInstallTask extends AbstractDeploymentTask {
 				ContentCreateOptions options;
 				options = new ContentCreateOptions();
 
-				String[] collections = resource.getCollections();
+                Collection[] collections = resource.getCollections();
 				if (collections != null && collections.length > 0) {
-					options.setCollections(collections);
+                    String[] contentCollections = new String[collections.length];
+                    int i = 0;
+                    for (Collection collection : collections) {
+                        contentCollections[i++] = collection.getUri();
+                    }
+                    options.setCollections(contentCollections);
 				}
 
-				Permission[] permissions = resource.getPermissions();
+                Permission[] permissions = resource.getPermissions();
 				if (permissions != null && permissions.length > 0) {
 					ContentPermission[] contentPermissions = new ContentPermission[permissions.length];
 					int i = 0;

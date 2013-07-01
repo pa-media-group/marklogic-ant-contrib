@@ -51,7 +51,8 @@ Sample Build Script
             <ml:permission role="executor" capability="execute"/>
             <include name="**/*.xqy"/>
         </ml:resources>
-        <ml:resources dir="${ml.src.dir}/fixtures" database="content" format="xml">
+        <ml:resources dir="${ml.src.dir}/fixtures" database="content" format="xml" outputDirectory="/my/directory/">
+            <ml:collection uri="MYCOLLECTION"/>
             <ml:permission role="reader" capability="read"/>
             <ml:permission role="writer" capability="insert"/>
             <ml:permission role="writer" capability="update"/>
