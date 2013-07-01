@@ -5,7 +5,7 @@
     <groupId>com.marklogic</groupId>
     <artifactId>marklogic-ant-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
 
     <modules>
         <module>marklogic-ant-apt</module>
@@ -124,7 +124,7 @@
             <dependency>
             	<groupId>com.marklogic</groupId>
             	<artifactId>marklogic-install-server</artifactId>
-            	<version>1.0.5-SNAPSHOT</version>
+            	<version>1.0.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
