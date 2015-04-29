@@ -135,6 +135,11 @@
             <name>developer.marklogic.com maven repository</name>
             <url>http://developer.marklogic.com/maven2/</url>
         </repository>
+        <repository>
+           <id>nexus-releases</id>
+           <name>nexus-releases</name>
+           <url>http://nexus.howden.press.net/nexus/content/repositories/releases</url>
+        </repository>
     </repositories>
 
     <build>
