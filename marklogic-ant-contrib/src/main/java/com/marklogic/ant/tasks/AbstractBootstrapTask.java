@@ -10,6 +10,8 @@ import java.util.List;
 import com.marklogic.xcc.Content;
 import com.marklogic.xcc.ContentFactory;
 import com.marklogic.xcc.Session;
+import com.marklogic.xcc.exceptions.RequestException;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -327,18 +329,25 @@ public abstract class AbstractBootstrapTask extends AbstractMarklogicTask {
 
         if (!"file-system".equalsIgnoreCase(database)) {
             session = getXccSessionFactory().getXccSession(database);
+			session.setTransactionMode(Session.TransactionMode.UPDATE);
 
-            ClassLoader loader = UpdateBootstrapTask.class.getClassLoader();
-            for (String path : libraryPaths) {
-                System.out.println("Uploading " + path);
-                try {
-                    Content cs = ContentFactory.newContent(path, loader.getResource("xquery" + path), null);
-                    session.insertContent(cs);
-                } catch (Exception e) {
-                    throw new BuildException("Failed to insert required library. " + e.getLocalizedMessage(), e);
-                }
-                session.commit();
-            }
+			try {
+	            ClassLoader loader = UpdateBootstrapTask.class.getClassLoader();
+	            for (String path : libraryPaths) {
+	                System.out.println("Uploading " + path);
+	                try {
+	                    Content cs = ContentFactory.newContent(path, loader.getResource("xquery" + path), null);
+	                    session.insertContent(cs);
+	                } catch (Exception e) {
+	                    throw new BuildException("Failed to insert required library. " + e.getLocalizedMessage(), e);
+	                }
+					session.commit();
+	            }
+			} catch (RequestException e) {
+			} finally {
+				session.close();
+			}
+            
         } else {
             System.out.println("");
             System.out.println("***************************************************************");
