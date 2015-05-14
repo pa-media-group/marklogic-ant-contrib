@@ -5,7 +5,7 @@
     <groupId>com.marklogic</groupId>
     <artifactId>marklogic-ant-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.11-SNAPSHOT</version>
+    <version>1.0.11</version>
 
     <modules>
         <module>marklogic-ant-apt</module>
@@ -46,7 +46,8 @@
         <connection>scm:git:git@github.com/PressAssociation/marklogic-ant-contrib.git</connection>
         <developerConnection>scm:git:git@github.com/PressAssociation/marklogic-ant-contrib.git</developerConnection>
         <url>https://github.com/PressAssociation/marklogic-ant-contrib</url>
-    </scm>
+      <tag>v1.0.11</tag>
+  </scm>
 
     <properties>
         <maven.compile.encoding>UTF-8</maven.compile.encoding>
